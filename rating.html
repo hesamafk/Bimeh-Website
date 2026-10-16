@@ -20,7 +20,7 @@
         <span class="brand-code">کد نمایندگی ۲۰۱۹۵</span>
       </div>
     </a>
-    <button class="nav-toggle" aria-label="باز کردن منو" aria-expanded="false"><i class="fa-solid fa-bars"></i></button>
+    <button class="nav-toggle" aria-label="باز کردن منو" aria-expanded="false"><span aria-hidden="true">☰</span></button>
     <div class="nav-scrim"></div>
     <nav class="main-nav" aria-label="منوی اصلی">
       <ul>
@@ -63,9 +63,9 @@
           <div class="form-card">
             <h2 style="color:var(--blue-900);font-size:1.15rem;font-weight:800;margin-bottom:20px">ثبت نظر و امتیاز شما</h2>
 
-            <div class="form-success" id="rating-success">
+            <div role="status" class="form-success" id="rating-success">
               <i class="fa-solid fa-circle-check"></i>
-              <span>سپاس از شما! نظر شما پس از بررسی نمایش داده خواهد شد.</span>
+              <span>نظر در همین مرورگر ذخیره شد و پس از تأیید در پنل محلی نمایش داده می‌شود.</span>
             </div>
 
             <form id="rating-form" novalidate>
@@ -162,7 +162,7 @@
   </div>
 </footer>
 
-<button class="to-top" aria-label="بازگشت به بالا"><i class="fa-solid fa-arrow-up"></i></button>
+<button class="to-top" aria-label="بازگشت به بالا"><span aria-hidden="true">↑</span></button>
 <script src="script.js"></script>
 </body>
 </html>

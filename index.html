@@ -23,9 +23,7 @@
       </div>
     </a>
 
-    <button class="nav-toggle" aria-label="باز کردن منو" aria-expanded="false">
-      <i class="fa-solid fa-bars"></i>
-    </button>
+    <button class="nav-toggle" aria-label="باز کردن منو" aria-expanded="false"><span aria-hidden="true">☰</span></button>
     <div class="nav-scrim"></div>
 
     <nav class="main-nav" aria-label="منوی اصلی">
@@ -171,41 +169,9 @@
         <span class="section-kicker center"><i class="fa-solid fa-comment-dots"></i> نظرات مشتریان</span>
         <h2>حرف مشتریان ما درباره ما</h2>
       </div>
-      <div class="grid-3">
-        <div class="testi-card reveal">
-          <div class="testi-stars">★★★★★</div>
-          <p class="testi-text">برخورد بسیار محترمانه و راهنمایی دقیق در انتخاب بیمه بدنه خودرو. واقعاً از خدمات‌شان راضی بودم.</p>
-          <div class="testi-who">
-            <div class="testi-avatar">م.ح</div>
-            <div>
-              <div class="testi-name">محمدرضا حسینی</div>
-              <div class="testi-role">مشتری بیمه بدنه</div>
-            </div>
-          </div>
-        </div>
-        <div class="testi-card reveal">
-          <div class="testi-stars">★★★★★</div>
-          <p class="testi-text">فرآیند دریافت خسارت بیمه آتش‌سوزی خیلی سریع و بدون دردسر انجام شد. ممنون از تیم حرفه‌ای‌شان.</p>
-          <div class="testi-who">
-            <div class="testi-avatar">س.ک</div>
-            <div>
-              <div class="testi-name">سارا کریمی</div>
-              <div class="testi-role">مشتری بیمه آتش‌سوزی</div>
-            </div>
-          </div>
-        </div>
-        <div class="testi-card reveal">
-          <div class="testi-stars">★★★★★</div>
-          <p class="testi-text">برای بیمه عمر فرزندم مشاوره گرفتم و واقعاً کارشناسان‌شان با حوصله همه سوالاتم رو جواب دادن.</p>
-          <div class="testi-who">
-            <div class="testi-avatar">ع.ا</div>
-            <div>
-              <div class="testi-name">علی اکبری</div>
-              <div class="testi-role">مشتری بیمه عمر</div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <div id="rating-summary-wrap"></div>
+      <div id="rating-list"></div>
+      <a class="btn btn-secondary" href="rating.html">ثبت نظر و امتیاز</a>
     </div>
   </section>
 
@@ -282,7 +248,7 @@
   </div>
 </footer>
 
-<button class="to-top" aria-label="بازگشت به بالا"><i class="fa-solid fa-arrow-up"></i></button>
+<button class="to-top" aria-label="بازگشت به بالا"><span aria-hidden="true">↑</span></button>
 
 <script src="script.js"></script>
 </body>

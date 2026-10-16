@@ -45,7 +45,8 @@ function lsGet(key, fallback) {
   try {
     const raw = localStorage.getItem(key);
     if (raw === null) return fallback;
-    return JSON.parse(raw);
+    const value = JSON.parse(raw);
+    return Array.isArray(fallback) && !Array.isArray(value) ? fallback : value;
   } catch (e) {
     return fallback;
   }
@@ -55,14 +56,25 @@ function lsSet(key, value) {
     localStorage.setItem(key, JSON.stringify(value));
     return true;
   } catch (e) {
-    console.error('خطا در ذخیره‌سازی', e);
+    showStorageError();
     return false;
   }
 }
-function ensureArticlesSeeded() {
-  if (localStorage.getItem(LS_KEYS.ARTICLES) === null) {
-    lsSet(LS_KEYS.ARTICLES, SEED_ARTICLES);
+function showStorageError() {
+  let notice = document.getElementById('storage-error');
+  if (!notice) {
+    notice = document.createElement('p');
+    notice.id = 'storage-error';
+    notice.className = 'storage-error';
+    notice.setAttribute('role', 'alert');
+    document.body.appendChild(notice);
   }
+  notice.textContent = 'ذخیره نشد. فضای مرورگر پر است یا دسترسی ذخیره‌سازی بسته است. اطلاعات فرم را نگه دارید و دوباره تلاش کنید.';
+}
+function ensureArticlesSeeded() {
+  try {
+    if (localStorage.getItem(LS_KEYS.ARTICLES) === null) lsSet(LS_KEYS.ARTICLES, SEED_ARTICLES);
+  } catch { /* The default articles remain available without browser storage. */ }
 }
 function uid() {
   return Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
@@ -142,12 +154,14 @@ function initReveal() {
    اعتبارسنجی عمومی فرم‌ها
    ============================================================ */
 function showFieldError(fieldEl, message) {
+  fieldEl.querySelector('input, textarea, select')?.setAttribute('aria-invalid', 'true');
   fieldEl.classList.add('invalid');
   const err = fieldEl.querySelector('.field-error');
   if (err && message) err.textContent = message;
 }
 function clearFieldError(fieldEl) {
   fieldEl.classList.remove('invalid');
+  fieldEl.querySelector('input, textarea, select')?.removeAttribute('aria-invalid');
 }
 function validateRequired(form) {
   let valid = true;
@@ -170,13 +184,16 @@ function validateRequired(form) {
       }
     }
     if (val && input.dataset.pattern === 'phone') {
-      const re = /^0?9\d{9}$|^0\d{10}$/;
-      if (!re.test(val.replace(/\s|-/g, ''))) {
+      const re = /^(?:0?9\d{9}|0\d{10})$/;
+      const normalized = val.replace(/[۰-۹]/g, d => String('۰۱۲۳۴۵۶۷۸۹'.indexOf(d))).replace(/[٠-٩]/g, d => String('٠١٢٣٤٥٦٧٨٩'.indexOf(d))).replace(/[\s-]/g, '');
+      input.value = normalized;
+      if (!re.test(normalized)) {
         showFieldError(fieldEl, 'شماره تماس را به‌درستی وارد کنید.');
         valid = false;
       }
     }
   });
+  if (!valid) form.querySelector('.invalid input, .invalid textarea, .invalid select')?.focus();
   return valid;
 }
 
@@ -203,7 +220,7 @@ function initContactForm() {
     };
     const list = lsGet(LS_KEYS.MESSAGES, []);
     list.unshift(data);
-    lsSet(LS_KEYS.MESSAGES, list);
+    if (!lsSet(LS_KEYS.MESSAGES, list)) return;
 
     form.reset();
     if (successBox) {
@@ -235,7 +252,7 @@ function initQuoteForm() {
     };
     const list = lsGet(LS_KEYS.QUOTES, []);
     list.unshift(data);
-    lsSet(LS_KEYS.QUOTES, list);
+    if (!lsSet(LS_KEYS.QUOTES, list)) return;
 
     form.reset();
     if (successBox) {
@@ -260,11 +277,30 @@ function initRatingPage() {
   function paintStars(n) {
     stars.forEach((s, idx) => s.classList.toggle('active', idx < n));
   }
+  starSelect?.setAttribute('role', 'radiogroup');
+  starSelect?.setAttribute('aria-label', 'امتیاز شما');
   stars.forEach((s, idx) => {
+    s.textContent = '★';
+    s.setAttribute('role', 'radio');
+    s.setAttribute('tabindex', idx === 0 ? '0' : '-1');
+    s.setAttribute('aria-label', (idx + 1) + ' ستاره');
+    s.setAttribute('aria-checked', 'false');
+    s.addEventListener('keydown', event => {
+      if (event.key === ' ' || event.key === 'Enter') { event.preventDefault(); s.click(); }
+      if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(event.key)) {
+        event.preventDefault();
+        const next = (idx + (['ArrowLeft', 'ArrowDown'].includes(event.key) ? 1 : 4)) % 5;
+        stars[next].click(); stars[next].focus();
+      }
+    });
     s.addEventListener('click', () => {
       chosenStars = idx + 1;
       starInputHidden.value = chosenStars;
       paintStars(chosenStars);
+      stars.forEach((star, i) => {
+        star.setAttribute('aria-checked', String(i === idx));
+        star.setAttribute('tabindex', i === idx ? '0' : '-1');
+      });
       const starField = starSelect.closest('[data-field]');
       if (starField) clearFieldError(starField);
     });
@@ -295,11 +331,12 @@ function initRatingPage() {
     };
     const list = lsGet(LS_KEYS.RATINGS, []);
     list.unshift(data);
-    lsSet(LS_KEYS.RATINGS, list);
+    if (!lsSet(LS_KEYS.RATINGS, list)) return;
 
     form.reset();
     chosenStars = 0;
     paintStars(0);
+    stars.forEach((star, i) => { star.setAttribute('aria-checked', 'false'); star.setAttribute('tabindex', i === 0 ? '0' : '-1'); });
     if (successBox) {
       successBox.classList.add('show');
       successBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -348,7 +385,7 @@ function renderRatingSummary() {
       listWrap.innerHTML = approved.slice(0, 20).map(r => `
         <div class="review-item">
           <div class="stars">${renderStarString(r.stars)}</div>
-          <span class="who">${escapeHtml(r.name)}</span><span class="when">${r.date}</span>
+          <span class="who">${escapeHtml(r.name)}</span><span class="when">${escapeHtml(r.date)}</span>
           ${r.comment ? `<p>${escapeHtml(r.comment)}</p>` : ''}
         </div>
       `).join('');
@@ -361,10 +398,16 @@ function renderStarString(n) {
   for (let i = 0; i < 5; i++) out += i < n ? '★' : '☆';
   return out;
 }
+function safeImageUrl(value) {
+  try {
+    const url = new URL(value, window.location.href);
+    return ['http:', 'https:'].includes(url.protocol) ? url.href : '';
+  } catch { return ''; }
+}
 function escapeHtml(str) {
   const div = document.createElement('div');
   div.textContent = str;
-  return div.innerHTML;
+  return div.innerHTML.replace(/"/g, "&quot;").replace(/'/g, "&#39;");
 }
 
 /* ============================================================
@@ -383,12 +426,12 @@ function initBlogPage() {
 
   grid.innerHTML = articles.map(a => `
     <article class="blog-card reveal">
-      <div class="blog-thumb"><img src="${a.img}" alt="${escapeHtml(a.title)}" loading="lazy"></div>
+      <div class="blog-thumb"><img src="${escapeHtml(safeImageUrl(a.img))}" alt="${escapeHtml(a.title)}" loading="lazy"></div>
       <div class="blog-body">
-        <span class="blog-date"><i class="fa-regular fa-calendar"></i> ${a.date}</span>
+        <span class="blog-date"><i class="fa-regular fa-calendar"></i> ${escapeHtml(a.date)}</span>
         <h3>${escapeHtml(a.title)}</h3>
         <p>${escapeHtml(a.excerpt)}</p>
-        <a class="blog-more" href="javascript:void(0)" onclick="openArticleModal('${a.id}')">بیشتر بخوانید <i class="fa-solid fa-arrow-left"></i></a>
+        <a class="blog-more" href="#article-modal" data-action="openArticleModal" data-id="${escapeHtml(a.id)}">بیشتر بخوانید <i class="fa-solid fa-arrow-left"></i></a>
       </div>
     </article>
   `).join('');
@@ -414,12 +457,13 @@ function openArticleModal(id) {
     modal.querySelector('#article-modal-close').addEventListener('click', closeArticleModal);
   }
   modal.querySelector('#article-modal-content').innerHTML = `
-    <img src="${a.img}" alt="${escapeHtml(a.title)}" style="border-radius:14px;margin-bottom:18px">
-    <span class="blog-date"><i class="fa-regular fa-calendar"></i> ${a.date}</span>
+    <img src="${escapeHtml(safeImageUrl(a.img))}" alt="${escapeHtml(a.title)}" style="border-radius:14px;margin-bottom:18px">
+    <span class="blog-date"><i class="fa-regular fa-calendar"></i> ${escapeHtml(a.date)}</span>
     <h3 style="color:var(--blue-900);font-size:1.2rem;margin:10px 0">${escapeHtml(a.title)}</h3>
     <p style="color:var(--gray-600);line-height:1.9">${escapeHtml(a.content || a.excerpt)}</p>
   `;
   modal.classList.add('open');
+  modal.querySelector('#article-modal-close')?.focus();
 }
 function closeArticleModal() {
   const modal = document.getElementById('article-modal');
@@ -466,7 +510,8 @@ const ADMIN_USER = 'admin';
 const ADMIN_PASS = '123456';
 
 function isAdminLoggedIn() {
-  return sessionStorage.getItem(LS_KEYS.ADMIN_SESSION) === 'true';
+  try { return sessionStorage.getItem(LS_KEYS.ADMIN_SESSION) === 'true'; }
+  catch { return false; }
 }
 
 function initAdminLogin() {
@@ -481,11 +526,12 @@ function initAdminLogin() {
   form.addEventListener('submit', (e) => {
     e.preventDefault();
     const u = form.querySelector('#a-user').value.trim();
-    const p = form.querySelector('#a-pass').value.trim();
+    const p = form.querySelector('#a-pass').value;
     const errBox = document.getElementById('admin-login-error');
 
     if (u === ADMIN_USER && p === ADMIN_PASS) {
-      sessionStorage.setItem(LS_KEYS.ADMIN_SESSION, 'true');
+      try { sessionStorage.setItem(LS_KEYS.ADMIN_SESSION, 'true'); }
+      catch { showStorageError(); return; }
       errBox.style.display = 'none';
       showAdminShell();
     } else {
@@ -557,11 +603,11 @@ function renderAdminArticles() {
   tbody.innerHTML = articles.map(a => `
     <tr>
       <td>${escapeHtml(a.title)}</td>
-      <td>${a.date}</td>
+      <td>${escapeHtml(a.date)}</td>
       <td>${escapeHtml((a.excerpt || '').slice(0, 40))}...</td>
       <td class="admin-actions-cell">
-        <button class="btn btn-sm btn-secondary" onclick="editArticlePrompt('${a.id}')"><i class="fa-solid fa-pen"></i> ویرایش</button>
-        <button class="btn btn-sm btn-danger" onclick="deleteArticle('${a.id}')"><i class="fa-solid fa-trash"></i> حذف</button>
+        <button class="btn btn-sm btn-secondary" data-action="editArticlePrompt" data-id="${escapeHtml(a.id)}"><i class="fa-solid fa-pen"></i> ویرایش</button>
+        <button class="btn btn-sm btn-danger" data-action="deleteArticle" data-id="${escapeHtml(a.id)}"><i class="fa-solid fa-trash"></i> حذف</button>
       </td>
     </tr>
   `).join('');
@@ -596,7 +642,7 @@ function openArticleForm(existing) {
         </div>
         <div class="field" data-field>
           <label>آدرس تصویر شاخص</label>
-          <input type="text" id="af-img" value="${existing ? existing.img : 'https://picsum.photos/seed/' + Math.random().toString(36).slice(2,8) + '/600/400'}">
+          <input type="text" id="af-img" value="${existing ? escapeHtml(existing.img) : 'https://picsum.photos/seed/' + Math.random().toString(36).slice(2,8) + '/600/400'}">
         </div>
         <div style="display:flex;gap:10px;margin-top:10px">
           <button type="submit" class="btn btn-primary btn-block">ذخیره مقاله</button>
@@ -626,7 +672,7 @@ function openArticleForm(existing) {
     } else {
       articles.unshift({ id: uid(), title, excerpt, content, img, date: todayFa() });
     }
-    lsSet(LS_KEYS.ARTICLES, articles);
+    if (!lsSet(LS_KEYS.ARTICLES, articles)) return;
     modal.classList.remove('open');
     renderAdminArticles();
   });
@@ -640,7 +686,7 @@ function deleteArticle(id) {
   if (!confirm('آیا از حذف این مقاله مطمئن هستید؟')) return;
   let articles = lsGet(LS_KEYS.ARTICLES, SEED_ARTICLES);
   articles = articles.filter(a => a.id !== id);
-  lsSet(LS_KEYS.ARTICLES, articles);
+  if (!lsSet(LS_KEYS.ARTICLES, articles)) return;
   renderAdminArticles();
 }
 
@@ -660,8 +706,8 @@ function renderAdminRatings() {
       <td>${escapeHtml(r.comment || '—')}</td>
       <td>${r.approved ? '<span class="pill pill-ok">تاییدشده</span>' : '<span class="pill pill-wait">در انتظار</span>'}</td>
       <td class="admin-actions-cell">
-        ${!r.approved ? `<button class="btn btn-sm btn-secondary" onclick="approveRating('${r.id}')"><i class="fa-solid fa-check"></i> تایید</button>` : ''}
-        <button class="btn btn-sm btn-danger" onclick="deleteRating('${r.id}')"><i class="fa-solid fa-trash"></i> حذف</button>
+        ${!r.approved ? `<button class="btn btn-sm btn-secondary" data-action="approveRating" data-id="${escapeHtml(r.id)}"><i class="fa-solid fa-check"></i> تایید</button>` : ''}
+        <button class="btn btn-sm btn-danger" data-action="deleteRating" data-id="${escapeHtml(r.id)}"><i class="fa-solid fa-trash"></i> حذف</button>
       </td>
     </tr>
   `).join('');
@@ -670,7 +716,7 @@ function approveRating(id) {
   const ratings = lsGet(LS_KEYS.RATINGS, []);
   const idx = ratings.findIndex(r => r.id === id);
   if (idx > -1) ratings[idx].approved = true;
-  lsSet(LS_KEYS.RATINGS, ratings);
+  if (!lsSet(LS_KEYS.RATINGS, ratings)) return;
   renderAdminRatings();
   updateAdminBadges();
 }
@@ -678,7 +724,7 @@ function deleteRating(id) {
   if (!confirm('آیا از حذف این نظر مطمئن هستید؟')) return;
   let ratings = lsGet(LS_KEYS.RATINGS, []);
   ratings = ratings.filter(r => r.id !== id);
-  lsSet(LS_KEYS.RATINGS, ratings);
+  if (!lsSet(LS_KEYS.RATINGS, ratings)) return;
   renderAdminRatings();
   updateAdminBadges();
 }
@@ -697,10 +743,10 @@ function renderAdminMessages() {
       <td>${escapeHtml(m.name)}</td>
       <td>${escapeHtml(m.phone)}</td>
       <td>${escapeHtml(m.subject)}</td>
-      <td>${m.date}</td>
+      <td>${escapeHtml(m.date)}</td>
       <td class="admin-actions-cell">
-        <button class="btn btn-sm btn-secondary" onclick="viewMessage('${m.id}')"><i class="fa-solid fa-eye"></i> مشاهده</button>
-        <button class="btn btn-sm btn-danger" onclick="deleteMessage('${m.id}')"><i class="fa-solid fa-trash"></i> حذف</button>
+        <button class="btn btn-sm btn-secondary" data-action="viewMessage" data-id="${escapeHtml(m.id)}"><i class="fa-solid fa-eye"></i> مشاهده</button>
+        <button class="btn btn-sm btn-danger" data-action="deleteMessage" data-id="${escapeHtml(m.id)}"><i class="fa-solid fa-trash"></i> حذف</button>
       </td>
     </tr>
   `).join('');
@@ -709,13 +755,13 @@ function viewMessage(id) {
   const messages = lsGet(LS_KEYS.MESSAGES, []);
   const m = messages.find(x => x.id === id);
   if (!m) return;
-  alert(`نام: ${m.name}\nتلفن: ${m.phone}\nایمیل: ${m.email}\nموضوع: ${m.subject}\nتاریخ: ${m.date}\n\nپیام:\n${m.message}`);
+  alert(`نام: ${m.name}\nتلفن: ${m.phone}\nایمیل: ${m.email}\nموضوع: ${m.subject}\nتاریخ: ${escapeHtml(m.date)}\n\nپیام:\n${m.message}`);
 }
 function deleteMessage(id) {
   if (!confirm('آیا از حذف این پیام مطمئن هستید؟')) return;
   let messages = lsGet(LS_KEYS.MESSAGES, []);
   messages = messages.filter(m => m.id !== id);
-  lsSet(LS_KEYS.MESSAGES, messages);
+  if (!lsSet(LS_KEYS.MESSAGES, messages)) return;
   renderAdminMessages();
   updateAdminBadges();
 }
@@ -734,7 +780,7 @@ function renderAdminQuotes() {
       <td>${escapeHtml(q.name)}</td>
       <td>${escapeHtml(q.phone)}</td>
       <td>${escapeHtml(q.type)}</td>
-      <td>${q.date}</td>
+      <td>${escapeHtml(q.date)}</td>
     </tr>
   `).join('');
 }
@@ -753,6 +799,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initContactForm();
   initQuoteForm();
   initRatingPage();
+  renderRatingSummary();
   initBlogPage();
   initServicesFilter();
   initAdminLogin();
@@ -762,4 +809,21 @@ document.addEventListener('DOMContentLoaded', () => {
   // دکمه افزودن مقاله در پنل ادمین
   const addArticleBtn = document.getElementById('admin-add-article');
   if (addArticleBtn) addArticleBtn.addEventListener('click', () => openArticleForm(null));
+});
+
+const articleActions = { openArticleModal, editArticlePrompt, deleteArticle, approveRating, deleteRating, viewMessage, deleteMessage };
+document.addEventListener('click', event => {
+  const control = event.target.closest('[data-action]');
+  if (!control || !Object.hasOwn(articleActions, control.dataset.action)) return;
+  event.preventDefault();
+  if (control.dataset.action !== 'openArticleModal' && !isAdminLoggedIn()) return;
+  articleActions[control.dataset.action](control.dataset.id);
+});
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape') document.querySelectorAll('.modal-backdrop.open').forEach(modal => modal.classList.remove('open'));
+});
+window.addEventListener('storage', () => {
+  renderRatingSummary();
+  if (document.getElementById('blog-grid')) initBlogPage();
+  if (isAdminLoggedIn()) showAdminShell();
 });
