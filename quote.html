@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>استعلام بیمه | بیمه ایران عطایی - کد نمایندگی ۲۰۱۹۵</title>
+<meta name="description" content="فرم استعلام آنلاین بیمه از نمایندگی بیمه ایران عطایی؛ سریع، رایگان و بدون تعهد.">
+<link rel="icon" href="https://api.iconify.design/mdi:shield-check.svg?color=%230033A0">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="index.html" class="brand">
+      <div class="brand-mark">ع</div>
+      <div class="brand-text">
+        <span class="brand-title">بیمه ایران عطایی</span>
+        <span class="brand-code">کد نمایندگی ۲۰۱۹۵</span>
+      </div>
+    </a>
+    <button class="nav-toggle" aria-label="باز کردن منو" aria-expanded="false"><i class="fa-solid fa-bars"></i></button>
+    <div class="nav-scrim"></div>
+    <nav class="main-nav" aria-label="منوی اصلی">
+      <ul>
+        <li><a href="index.html" data-page="index.html">خانه</a></li>
+        <li><a href="about.html" data-page="about.html">درباره ما</a></li>
+        <li><a href="services.html" data-page="services.html">خدمات</a></li>
+        <li><a href="blog.html" data-page="blog.html">مقالات</a></li>
+        <li><a href="rating.html" data-page="rating.html">امتیازدهی</a></li>
+        <li><a href="contact.html" data-page="contact.html">تماس با ما</a></li>
+      </ul>
+    </nav>
+    <div class="header-cta">
+      <a href="tel:02122700000" class="call-link"><i class="fa-solid fa-phone"></i> ۰۲۱-۲۲۷۰۰۰۰۰</a>
+      <a href="quote.html" class="btn btn-primary">استعلام بیمه</a>
+    </div>
+  </div>
+</header>
+
+<main class="main-content">
+
+  <section class="page-hero">
+    <div class="container">
+      <div class="breadcrumb"><a href="index.html">خانه</a> <i class="fa-solid fa-angle-left"></i> <span>استعلام بیمه</span></div>
+      <h1>فرم استعلام بیمه</h1>
+      <p>اطلاعات خود را وارد کنید تا کارشناسان ما در کوتاه‌ترین زمان ممکن، استعلام رایگان برایتان ارسال کنند.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div style="max-width:620px;margin-inline:auto" class="reveal">
+        <div class="form-card">
+
+          <div class="form-success" id="quote-success">
+            <i class="fa-solid fa-circle-check"></i>
+            <span>درخواست استعلام شما ثبت شد. کارشناسان ما به‌زودی با شما تماس خواهند گرفت.</span>
+          </div>
+
+          <form id="quote-form" novalidate>
+            <div class="field" data-field>
+              <label for="q-name">نام کامل <span class="req">*</span></label>
+              <input type="text" id="q-name" required>
+              <div class="field-error"></div>
+            </div>
+            <div class="field" data-field>
+              <label for="q-phone">شماره تماس <span class="req">*</span></label>
+              <input type="tel" id="q-phone" data-pattern="phone" required>
+              <div class="field-error"></div>
+            </div>
+            <div class="field" data-field>
+              <label for="q-type">نوع بیمه مورد نظر <span class="req">*</span></label>
+              <select id="q-type" required>
+                <option value="">انتخاب کنید...</option>
+                <option value="بیمه شخص ثالث">بیمه شخص ثالث</option>
+                <option value="بیمه بدنه">بیمه بدنه</option>
+                <option value="بیمه آتش‌سوزی">بیمه آتش‌سوزی</option>
+                <option value="بیمه عمر">بیمه عمر</option>
+                <option value="بیمه درمان">بیمه درمان</option>
+                <option value="بیمه مسئولیت">بیمه مسئولیت</option>
+                <option value="سایر موارد">سایر موارد</option>
+              </select>
+              <div class="field-error"></div>
+            </div>
+            <div class="field" data-field>
+              <label for="q-message">توضیحات تکمیلی</label>
+              <textarea id="q-message" placeholder="مثلاً مدل خودرو، متراژ ملک یا هر جزئیات دیگر..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block"><i class="fa-solid fa-file-circle-check"></i> ثبت درخواست استعلام</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-top">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <div class="footer-brand">
+          <div class="brand-mark">ع</div>
+          <div class="brand-text">
+            <span class="brand-title" style="color:#fff">بیمه ایران عطایی</span>
+            <span class="brand-code">کد نمایندگی ۲۰۱۹۵</span>
+          </div>
+        </div>
+        <p class="footer-desc">با بیش از ۱۰ سال سابقه درخشان، همواره در کنار شما هستیم.</p>
+        <div class="social-row">
+          <a href="#" aria-label="اینستاگرام"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#" aria-label="تلگرام"><i class="fa-brands fa-telegram"></i></a>
+          <a href="#" aria-label="واتساپ"><i class="fa-brands fa-whatsapp"></i></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>لینک‌های سریع</h4>
+        <ul>
+          <li><a href="index.html">خانه</a></li>
+          <li><a href="about.html">درباره ما</a></li>
+          <li><a href="services.html">خدمات</a></li>
+          <li><a href="blog.html">مقالات</a></li>
+          <li><a href="rating.html">امتیازدهی</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>خدمات بیمه</h4>
+        <ul>
+          <li><a href="services.html">بیمه شخص ثالث</a></li>
+          <li><a href="services.html">بیمه بدنه</a></li>
+          <li><a href="services.html">بیمه آتش‌سوزی</a></li>
+          <li><a href="services.html">بیمه عمر</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>اطلاعات تماس</h4>
+        <ul>
+          <li class="footer-contact-item"><i class="fa-solid fa-location-dot"></i> زعفرانیه، تهران</li>
+          <li class="footer-contact-item"><i class="fa-solid fa-phone"></i> ۰۲۱-۲۲۷۰۰۰۰۰</li>
+          <li class="footer-contact-item"><i class="fa-solid fa-mobile-screen"></i> ۰۹۱۲۰۰۰۰۰۰۰</li>
+          <li class="footer-contact-item"><i class="fa-solid fa-clock"></i> شنبه تا چهارشنبه، ۸ تا ۱۷</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="container footer-bottom">
+    <span>© ۱۴۰۴ بیمه ایران عطایی — کد نمایندگی ۲۰۱۹۵. تمامی حقوق محفوظ است.</span>
+    <a href="admin.html" style="color:rgba(255,255,255,.5)"><i class="fa-solid fa-lock"></i> ورود مدیر</a>
+  </div>
+</footer>
+
+<button class="to-top" aria-label="بازگشت به بالا"><i class="fa-solid fa-arrow-up"></i></button>
+<script src="script.js"></script>
+</body>
+</html>

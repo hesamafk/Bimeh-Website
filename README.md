@@ -1,19 +1,16 @@
 # Bimeh-Website
 
-Persian RTL insurance website prototype with multiple pages and client-side interactions.
+Persian insurance website prototype; verify any backend/admin behavior before production.
 
-> **Status:** Portfolio / educational prototype. Source code is intended to be shared for review; deployment on GitHub Pages is optional.
+**Status:** Experimental / portfolio project. Not production-ready.
 
-## Technology
-HTML, CSS, JavaScript
-
-## Local development
-Open index.html locally. Admin, quote, and other interactive features are demonstrations unless backed by a server.
-
-## Source code status
-The full project source has **not yet been committed to this repository**. This README documents the project while source transfer is pending. Do not treat this repository as a complete copy until the files appear here.
+## Getting started
+Open `index.html` in a browser (or use a local static web server).
 
 ## Notes
-- Keep source files and relative asset paths together.
-- Do not commit passwords, API tokens, local databases containing personal data, or generated dependency folders.
-- Check functionality locally; a static GitHub preview is not a substitute for a backend.
+Do not use demo authentication, sample data, payment or admin UI as a production service without a security review.
+
+## Portfolio source
+This repository contains the project source for local use and review. GitHub Pages deployment is optional. Some features may require a local development server or external dependencies.
+
+**Note:** This is a learning / portfolio project, not a production-ready service.

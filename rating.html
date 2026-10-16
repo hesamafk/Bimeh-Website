@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>امتیازدهی به برخورد | بیمه ایران عطایی - کد نمایندگی ۲۰۱۹۵</title>
+<meta name="description" content="نظر خود را درباره کیفیت خدمات و برخورد کارکنان نمایندگی بیمه ایران عطایی ثبت کنید.">
+<link rel="icon" href="https://api.iconify.design/mdi:shield-check.svg?color=%230033A0">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="index.html" class="brand">
+      <div class="brand-mark">ع</div>
+      <div class="brand-text">
+        <span class="brand-title">بیمه ایران عطایی</span>
+        <span class="brand-code">کد نمایندگی ۲۰۱۹۵</span>
+      </div>
+    </a>
+    <button class="nav-toggle" aria-label="باز کردن منو" aria-expanded="false"><i class="fa-solid fa-bars"></i></button>
+    <div class="nav-scrim"></div>
+    <nav class="main-nav" aria-label="منوی اصلی">
+      <ul>
+        <li><a href="index.html" data-page="index.html">خانه</a></li>
+        <li><a href="about.html" data-page="about.html">درباره ما</a></li>
+        <li><a href="services.html" data-page="services.html">خدمات</a></li>
+        <li><a href="blog.html" data-page="blog.html">مقالات</a></li>
+        <li><a href="rating.html" data-page="rating.html" class="active">امتیازدهی</a></li>
+        <li><a href="contact.html" data-page="contact.html">تماس با ما</a></li>
+      </ul>
+    </nav>
+    <div class="header-cta">
+      <a href="tel:02122700000" class="call-link"><i class="fa-solid fa-phone"></i> ۰۲۱-۲۲۷۰۰۰۰۰</a>
+      <a href="quote.html" class="btn btn-primary">استعلام بیمه</a>
+    </div>
+  </div>
+</header>
+
+<main class="main-content">
+
+  <section class="page-hero">
+    <div class="container">
+      <div class="breadcrumb"><a href="index.html">خانه</a> <i class="fa-solid fa-angle-left"></i> <span>امتیازدهی</span></div>
+      <h1>امتیازدهی به برخورد</h1>
+      <p>تجربه خود از خدمات نمایندگی بیمه ایران عطایی را با ما در میان بگذارید.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+
+      <div class="rating-summary reveal" id="rating-summary-wrap">
+        <!-- با جاوااسکریپت پر می‌شود -->
+      </div>
+
+      <div class="grid-2" style="align-items:start">
+
+        <!-- فرم امتیازدهی -->
+        <div class="reveal">
+          <div class="form-card">
+            <h2 style="color:var(--blue-900);font-size:1.15rem;font-weight:800;margin-bottom:20px">ثبت نظر و امتیاز شما</h2>
+
+            <div class="form-success" id="rating-success">
+              <i class="fa-solid fa-circle-check"></i>
+              <span>سپاس از شما! نظر شما پس از بررسی نمایش داده خواهد شد.</span>
+            </div>
+
+            <form id="rating-form" novalidate>
+              <div class="field" data-field>
+                <label>امتیاز شما <span class="req">*</span></label>
+                <div class="star-select" id="star-select">
+                  <i class="fa-solid fa-star" data-v="1"></i>
+                  <i class="fa-solid fa-star" data-v="2"></i>
+                  <i class="fa-solid fa-star" data-v="3"></i>
+                  <i class="fa-solid fa-star" data-v="4"></i>
+                  <i class="fa-solid fa-star" data-v="5"></i>
+                </div>
+                <input type="hidden" id="r-stars-value">
+                <div class="field-error"></div>
+              </div>
+              <div class="field">
+                <label for="r-name">نام شما (اختیاری)</label>
+                <input type="text" id="r-name" placeholder="در صورت تمایل نام خود را وارد کنید">
+              </div>
+              <div class="field">
+                <label for="r-comment">توضیحات (اختیاری)</label>
+                <textarea id="r-comment" placeholder="تجربه خود را با ما در میان بگذارید..."></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary btn-block"><i class="fa-solid fa-paper-plane"></i> ثبت نظر</button>
+            </form>
+          </div>
+        </div>
+
+        <!-- لیست نظرات -->
+        <div class="reveal">
+          <h2 style="color:var(--blue-900);font-size:1.15rem;font-weight:800;margin-bottom:20px">نظرات کاربران</h2>
+          <div id="rating-list">
+            <!-- با جاوااسکریپت پر می‌شود -->
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-top">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <div class="footer-brand">
+          <div class="brand-mark">ع</div>
+          <div class="brand-text">
+            <span class="brand-title" style="color:#fff">بیمه ایران عطایی</span>
+            <span class="brand-code">کد نمایندگی ۲۰۱۹۵</span>
+          </div>
+        </div>
+        <p class="footer-desc">با بیش از ۱۰ سال سابقه درخشان، همواره در کنار شما هستیم.</p>
+        <div class="social-row">
+          <a href="#" aria-label="اینستاگرام"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#" aria-label="تلگرام"><i class="fa-brands fa-telegram"></i></a>
+          <a href="#" aria-label="واتساپ"><i class="fa-brands fa-whatsapp"></i></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>لینک‌های سریع</h4>
+        <ul>
+          <li><a href="index.html">خانه</a></li>
+          <li><a href="about.html">درباره ما</a></li>
+          <li><a href="services.html">خدمات</a></li>
+          <li><a href="blog.html">مقالات</a></li>
+          <li><a href="rating.html">امتیازدهی</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>خدمات بیمه</h4>
+        <ul>
+          <li><a href="services.html">بیمه شخص ثالث</a></li>
+          <li><a href="services.html">بیمه بدنه</a></li>
+          <li><a href="services.html">بیمه آتش‌سوزی</a></li>
+          <li><a href="services.html">بیمه عمر</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>اطلاعات تماس</h4>
+        <ul>
+          <li class="footer-contact-item"><i class="fa-solid fa-location-dot"></i> زعفرانیه، تهران</li>
+          <li class="footer-contact-item"><i class="fa-solid fa-phone"></i> ۰۲۱-۲۲۷۰۰۰۰۰</li>
+          <li class="footer-contact-item"><i class="fa-solid fa-mobile-screen"></i> ۰۹۱۲۰۰۰۰۰۰۰</li>
+          <li class="footer-contact-item"><i class="fa-solid fa-clock"></i> شنبه تا چهارشنبه، ۸ تا ۱۷</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="container footer-bottom">
+    <span>© ۱۴۰۴ بیمه ایران عطایی — کد نمایندگی ۲۰۱۹۵. تمامی حقوق محفوظ است.</span>
+    <a href="admin.html" style="color:rgba(255,255,255,.5)"><i class="fa-solid fa-lock"></i> ورود مدیر</a>
+  </div>
+</footer>
+
+<button class="to-top" aria-label="بازگشت به بالا"><i class="fa-solid fa-arrow-up"></i></button>
+<script src="script.js"></script>
+</body>
+</html>

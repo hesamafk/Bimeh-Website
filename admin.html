@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>پنل مدیریت | بیمه ایران عطایی</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="https://api.iconify.design/mdi:shield-check.svg?color=%230033A0">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="index.html" class="brand">
+      <div class="brand-mark">ع</div>
+      <div class="brand-text">
+        <span class="brand-title">بیمه ایران عطایی</span>
+        <span class="brand-code">پنل مدیریت</span>
+      </div>
+    </a>
+    <a href="index.html" class="btn btn-secondary btn-sm"><i class="fa-solid fa-house"></i> بازگشت به سایت</a>
+  </div>
+</header>
+
+<main class="main-content">
+
+  <!-- فرم ورود -->
+  <div id="admin-login-wrap">
+    <section class="admin-login">
+      <div class="form-card" style="max-width:400px">
+        <div class="text-center mb-lg">
+          <div class="brand-mark" style="margin-inline:auto;margin-bottom:14px">ع</div>
+          <h1 style="color:var(--blue-900);font-size:1.3rem;font-weight:800">ورود به پنل مدیریت</h1>
+          <p style="color:var(--gray-600);font-size:.9rem;margin-top:6px">لطفاً نام کاربری و رمز عبور خود را وارد کنید.</p>
+        </div>
+
+        <div class="form-success" id="admin-login-error" style="display:none;background:#FDEDEE;color:#C0392B;border-color:#F6CACD">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+          <span>نام کاربری یا رمز عبور اشتباه است.</span>
+        </div>
+
+        <form id="admin-login-form" novalidate>
+          <div class="field" data-field>
+            <label for="a-user">نام کاربری</label>
+            <input type="text" id="a-user" required autocomplete="username">
+            <div class="field-error"></div>
+          </div>
+          <div class="field" data-field>
+            <label for="a-pass">رمز عبور</label>
+            <input type="password" id="a-pass" required autocomplete="current-password">
+            <div class="field-error"></div>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block"><i class="fa-solid fa-right-to-bracket"></i> ورود</button>
+        </form>
+      </div>
+    </section>
+  </div>
+
+  <!-- پنل مدیریت -->
+  <div id="admin-shell" class="admin-shell" style="display:none">
+    <aside class="admin-side">
+      <div class="brand">
+        <div class="brand-mark">ع</div>
+        <div class="brand-text">
+          <span class="brand-title">بیمه ایران عطایی</span>
+          <span class="brand-code">پنل مدیریت</span>
+        </div>
+      </div>
+      <button class="admin-nav-btn active" data-panel="articles"><i class="fa-solid fa-newspaper"></i> مدیریت مقالات</button>
+      <button class="admin-nav-btn" data-panel="ratings"><i class="fa-solid fa-star"></i> مدیریت نظرات
+        <span class="pill pill-wait" id="badge-pending-ratings" style="margin-inline-start:6px"></span>
+      </button>
+      <button class="admin-nav-btn" data-panel="messages"><i class="fa-solid fa-envelope"></i> پیام‌های تماس</button>
+      <button class="admin-nav-btn" data-panel="quotes"><i class="fa-solid fa-file-circle-check"></i> درخواست‌های استعلام</button>
+      <button class="admin-nav-btn admin-logout" id="admin-logout"><i class="fa-solid fa-right-from-bracket"></i> خروج</button>
+    </aside>
+
+    <div class="admin-main">
+
+      <!-- مقالات -->
+      <section class="admin-panel active" id="panel-articles">
+        <div class="admin-toolbar">
+          <h2 style="margin-bottom:0">مدیریت مقالات</h2>
+          <button class="btn btn-primary btn-sm" id="admin-add-article"><i class="fa-solid fa-plus"></i> افزودن مقاله جدید</button>
+        </div>
+        <div style="overflow-x:auto">
+          <table class="admin-table">
+            <thead>
+              <tr><th>عنوان</th><th>تاریخ</th><th>چکیده</th><th>عملیات</th></tr>
+            </thead>
+            <tbody id="admin-articles-body"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- نظرات -->
+      <section class="admin-panel" id="panel-ratings">
+        <h2>مدیریت نظرات و امتیازات</h2>
+        <div style="overflow-x:auto">
+          <table class="admin-table">
+            <thead>
+              <tr><th>نام</th><th>امتیاز</th><th>نظر</th><th>وضعیت</th><th>عملیات</th></tr>
+            </thead>
+            <tbody id="admin-ratings-body"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- پیام‌های تماس -->
+      <section class="admin-panel" id="panel-messages">
+        <h2>پیام‌های تماس با ما</h2>
+        <div style="overflow-x:auto">
+          <table class="admin-table">
+            <thead>
+              <tr><th>نام</th><th>تلفن</th><th>موضوع</th><th>تاریخ</th><th>عملیات</th></tr>
+            </thead>
+            <tbody id="admin-messages-body"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- درخواست‌های استعلام -->
+      <section class="admin-panel" id="panel-quotes">
+        <h2>درخواست‌های استعلام بیمه</h2>
+        <div style="overflow-x:auto">
+          <table class="admin-table">
+            <thead>
+              <tr><th>نام</th><th>تلفن</th><th>نوع بیمه</th><th>تاریخ</th></tr>
+            </thead>
+            <tbody id="admin-quotes-body"></tbody>
+          </table>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>
